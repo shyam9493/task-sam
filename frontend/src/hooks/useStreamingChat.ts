@@ -12,6 +12,7 @@ export function useStreamingChat(jobId: string | null) {
     const addCitationToCurrentMessage = useChatStore((state) => state.addCitationToCurrentMessage);
     const addSourceToCurrentMessage = useChatStore((state) => state.addSourceToCurrentMessage);
     const addToolCallToCurrentMessage = useChatStore((state) => state.addToolCallToCurrentMessage);
+    const upsertToolCallToCurrentMessage = useChatStore((state) => state.upsertToolCallToCurrentMessage);
     const updateToolCallStatus = useChatStore((state) => state.updateToolCallStatus);
     const finalizeStreamingMessage = useChatStore((state) => state.finalizeStreamingMessage);
 
@@ -63,7 +64,7 @@ export function useStreamingChat(jobId: string | null) {
 
                     case 'tool_call': {
                         const data = streamEvent.data as { toolCall: any };
-                        addToolCallToCurrentMessage(data.toolCall);
+                        upsertToolCallToCurrentMessage(data.toolCall);
                         break;
                     }
 
@@ -104,6 +105,7 @@ export function useStreamingChat(jobId: string | null) {
         addCitationToCurrentMessage,
         addSourceToCurrentMessage,
         addToolCallToCurrentMessage,
+        upsertToolCallToCurrentMessage,
         updateToolCallStatus,
         finalizeStreamingMessage,
     ]);

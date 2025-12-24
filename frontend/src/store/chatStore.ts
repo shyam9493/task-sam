@@ -14,6 +14,7 @@ interface ChatState {
     addCitationToCurrentMessage: (citation: any) => void;
     addSourceToCurrentMessage: (source: any) => void;
     addToolCallToCurrentMessage: (toolCall: any) => void;
+    upsertToolCallToCurrentMessage: (toolCall: any) => void;
     updateToolCallStatus: (toolCallId: string, status: 'running' | 'completed' | 'failed') => void;
     finalizeStreamingMessage: () => void;
     clearChat: () => void;
@@ -79,6 +80,34 @@ export const useChatStore = create<ChatState>((set) => ({
                     toolCalls: [...(state.currentStreamingMessage.toolCalls || []), toolCall],
                 },
             };
+        }),
+
+    upsertToolCallToCurrentMessage: (toolCall) =>
+        set((state) => {
+            if (!state.currentStreamingMessage) return state;
+            const existingIndex = state.currentStreamingMessage.toolCalls?.findIndex(
+                (tc) => tc.id === toolCall.id
+            ) ?? -1;
+
+            if (existingIndex >= 0 && state.currentStreamingMessage.toolCalls) {
+                // Update existing
+                const newToolCalls = [...state.currentStreamingMessage.toolCalls];
+                newToolCalls[existingIndex] = toolCall;
+                return {
+                    currentStreamingMessage: {
+                        ...state.currentStreamingMessage,
+                        toolCalls: newToolCalls,
+                    },
+                };
+            } else {
+                // Add new
+                return {
+                    currentStreamingMessage: {
+                        ...state.currentStreamingMessage,
+                        toolCalls: [...(state.currentStreamingMessage.toolCalls || []), toolCall],
+                    },
+                };
+            }
         }),
 
     updateToolCallStatus: (toolCallId, status) =>
