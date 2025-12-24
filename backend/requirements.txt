@@ -1,2 +1,8 @@
-uvicorn
+uvicorn[standard]
 fastapi
+pydantic
+pdfplumber
+python-multipart
+sse-starlette
+google-generativeai
+python-dotenv

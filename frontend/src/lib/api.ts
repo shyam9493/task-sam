@@ -25,6 +25,6 @@ export function createStreamConnection(jobId: string): EventSource {
     return new EventSource(`${API_BASE_URL}/api/stream/${jobId}`);
 }
 
-export async function getPDFUrl(documentId: string): Promise<string> {
+export function getPDFUrl(documentId: string): string {
     return `${API_BASE_URL}/api/pdf/${documentId}`;
 }

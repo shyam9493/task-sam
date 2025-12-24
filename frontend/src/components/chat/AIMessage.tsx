@@ -24,7 +24,7 @@ export function AIMessage({ message }: AIMessageProps) {
         }
 
         // Simple citation rendering - replace [1], [2], etc. with badge components
-        const parts: (string | JSX.Element)[] = [];
+        const parts: (string | React.ReactElement)[] = [];
         let lastIndex = 0;
         const citationRegex = /\[(\d+)\]/g;
         let match;
