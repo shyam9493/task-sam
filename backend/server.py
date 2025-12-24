@@ -4,16 +4,16 @@ from fastapi.responses import FileResponse, StreamingResponse
 from sse_starlette.sse import EventSourceResponse
 import json
 import uuid
-from dotenv import load_dotenv
 import os
+
+# Load environment variables FIRST before importing other modules
+from dotenv import load_dotenv
+load_dotenv()
 
 from models import ChatRequest, ChatResponse
 from grok_client import grok_client
 from pdf_processor import pdf_processor
 from queue_manager import job_queue
-
-# Load environment variables
-load_dotenv()
 
 app = FastAPI(title="AI Search Chat API")
 
@@ -67,7 +67,7 @@ async def stream_response(job_id: str):
     if not job:
         raise HTTPException(status_code=404, detail="Job not found")
     
-    # Update job status
+
     job_queue.update_job_status(job_id, "streaming")
     
     async def event_generator():
