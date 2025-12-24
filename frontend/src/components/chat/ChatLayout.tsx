@@ -8,7 +8,12 @@ import { sendMessage } from '@/lib/api';
 import { useStreamingChat } from '@/hooks/useStreamingChat';
 import { MessageList } from './MessageList';
 import { InputBox } from './InputBox';
-import { PDFViewer } from '../pdf/PDFViewer';
+import dynamic from 'next/dynamic';
+
+// Import PDFViewer dynamically to avoid SSR issues with PDF.js
+const PDFViewer = dynamic(() => import('../pdf/PDFViewer').then(mod => ({ default: mod.PDFViewer })), {
+    ssr: false,
+});
 
 export function ChatLayout() {
     const [currentJobId, setCurrentJobId] = useState<string | null>(null);
