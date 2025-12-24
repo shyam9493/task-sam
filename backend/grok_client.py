@@ -118,6 +118,9 @@ Answer:"""
         
         # Step 3: Stream the response
         try:
+            print(f"[DEBUG] Calling Grok API with model: {self.model}")
+            print(f"[DEBUG] Query: {query}")
+            
             stream = self.client.chat.completions.create(
                 model=self.model,
                 messages=[
@@ -132,8 +135,10 @@ Answer:"""
             full_text = ""
             citation_counter = 1
             citations_added = set()
+            chunk_count = 0
             
             for chunk in stream:
+                chunk_count += 1
                 if chunk.choices[0].delta.content:
                     delta = chunk.choices[0].delta.content
                     full_text += delta
@@ -175,6 +180,9 @@ Answer:"""
                                 }
                             }
             
+            print(f"[DEBUG] Received {chunk_count} chunks from Grok API")
+            print(f"[DEBUG] Total text length: {len(full_text)}")
+            
             # Step 4: Emit source cards for cited documents
             for citation_num in sorted(citations_added):
                 ctx = pdf_contexts[citation_num - 1]
@@ -199,6 +207,9 @@ Answer:"""
             }
             
         except Exception as e:
+            print(f"[ERROR] Grok API error: {type(e).__name__}: {str(e)}")
+            import traceback
+            traceback.print_exc()
             yield {
                 "event": "error",
                 "data": {
