@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 import os
 
 from models import ChatRequest, ChatResponse
-from gemini_client import gemini_client
+from grok_client import grok_client
 from pdf_processor import pdf_processor
 from queue_manager import job_queue
 
@@ -86,8 +86,8 @@ async def stream_response(job_id: str):
                 }
                 return
             
-            # Stream response from Gemini
-            async for event in gemini_client.generate_response_stream(
+            # Stream response from Grok
+            async for event in grok_client.generate_response_stream(
                 job["query"],
                 available_docs
             ):
