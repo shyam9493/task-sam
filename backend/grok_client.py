@@ -30,11 +30,14 @@ class GroqClient:
         """
         
         # Step 1: Emit tool call for searching documents
+        import time
+        timestamp = int(time.time() * 1000)  # milliseconds
+        
         yield {
             "event": "tool_call",
             "data": {
                 "toolCall": {
-                    "id": "tc-1",
+                    "id": f"tc-search-{timestamp}",
                     "name": "search_documents",
                     "status": "running",
                     "description": "Searching available documents..."
@@ -61,7 +64,7 @@ class GroqClient:
             "event": "tool_call",
             "data": {
                 "toolCall": {
-                    "id": "tc-1",
+                    "id": f"tc-search-{timestamp}",
                     "name": "search_documents",
                     "status": "completed",
                     "description": f"Found {len(pdf_contexts)} documents"
@@ -74,7 +77,7 @@ class GroqClient:
             "event": "tool_call",
             "data": {
                 "toolCall": {
-                    "id": "tc-2",
+                    "id": f"tc-analyze-{timestamp}",
                     "name": "analyze_content",
                     "status": "running",
                     "description": "Analyzing document content..."
@@ -109,7 +112,7 @@ Answer:"""
             "event": "tool_call",
             "data": {
                 "toolCall": {
-                    "id": "tc-2",
+                    "id": f"tc-analyze-{timestamp}",
                     "name": "analyze_content",
                     "status": "completed",
                     "description": "Analysis complete"
