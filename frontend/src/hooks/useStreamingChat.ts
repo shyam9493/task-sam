@@ -98,15 +98,6 @@ export function useStreamingChat(jobId: string | null) {
                 eventSourceRef.current.close();
             }
         };
-    }, [
-        jobId,
-        setStreamingMessage,
-        updateStreamingMessage,
-        addCitationToCurrentMessage,
-        addSourceToCurrentMessage,
-        addToolCallToCurrentMessage,
-        upsertToolCallToCurrentMessage,
-        updateToolCallStatus,
-        finalizeStreamingMessage,
-    ]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [jobId]); // Only jobId needed - store functions are stable
 }
