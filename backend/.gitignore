@@ -4,6 +4,6 @@ venv
 __pycache__/
 *.pyc
 .env
-*.pdf
-sample_pdfs/
+sample_pdfs/*.pdf
+!sample_pdfs/README.md
 *.pyo
