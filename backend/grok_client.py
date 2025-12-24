@@ -28,8 +28,7 @@ class GroqClient:
         """
         Generate streaming response with citations from Grok API
         """
-        
-        # Step 1: Emit tool call for searching documents
+
         import time
         timestamp = int(time.time() * 1000)  # milliseconds
         
