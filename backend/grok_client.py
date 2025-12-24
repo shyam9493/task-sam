@@ -167,8 +167,37 @@ Answer:"""
                             # Create citation from context
                             ctx = pdf_contexts[citation_num - 1]
                             
-                            # Extract a relevant excerpt (simplified - just take first 200 chars)
-                            excerpt = ctx['content'][:200].strip() + "..."
+                            # Try to find relevant excerpt by looking at text around the citation
+                            # Find the sentence containing the citation marker
+                            citation_pattern = f'\\[{citation_num}\\]'
+                            citation_pos = full_text.find(citation_pattern)
+                            
+                            # Get context around citation (previous 100 chars)
+                            context_start = max(0, citation_pos - 100)
+                            context_text = full_text[context_start:citation_pos].strip()
+                            
+                            # Extract key terms from context (simple: last few words)
+                            words = context_text.split()
+                            search_terms = ' '.join(words[-10:]) if len(words) >= 10 else context_text
+                            
+                            # Search for these terms in the PDF
+                            excerpt = ctx['content'][:200].strip() + "..."  # Default
+                            
+                            # Try to find a better excerpt by searching for search terms
+                            if search_terms:
+                                pdf_text_lower = ctx['content'].lower()
+                                search_lower = search_terms.lower()
+                                
+                                # Find first occurrence of any significant word
+                                for word in search_terms.split():
+                                    if len(word) > 4:  # Only search for meaningful words
+                                        idx = pdf_text_lower.find(word.lower())
+                                        if idx >= 0:
+                                            # Extract excerpt around this position
+                                            start = max(0, idx - 50)
+                                            end = min(len(ctx['content']), idx + 150)
+                                            excerpt = "..." + ctx['content'][start:end].strip() + "..."
+                                            break
                             
                             yield {
                                 "event": "citation",
