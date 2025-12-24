@@ -68,6 +68,7 @@ async def stream_response(job_id: str):
         raise HTTPException(status_code=404, detail="Job not found")
     
 
+
     job_queue.update_job_status(job_id, "streaming")
     
     async def event_generator():

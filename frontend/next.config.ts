@@ -1,10 +1,12 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  webpack: (config) => {
-    config.resolve.alias.canvas = false;
-    config.resolve.alias.encoding = false;
-    return config;
+  // Use Turbopack (default in Next.js 16)
+  turbopack: {
+    resolveAlias: {
+      canvas: "./empty-module.js",
+      encoding: "./empty-module.js",
+    },
   },
 };
 
