@@ -5,19 +5,20 @@ import json
 from models import Citation, SourceCard, ToolCall
 from pdf_processor import pdf_processor
 
-class GrokClient:
+class GroqClient:
     def __init__(self):
-        # Grok uses OpenAI-compatible API
-        api_key = os.getenv("GROK_API_KEY") or os.getenv("XAI_API_KEY")
+        # Groq uses OpenAI-compatible API
+        api_key = os.getenv("GROK_API_KEY") or os.getenv("XAI_API_KEY") or os.getenv("GROQ_API_KEY")
         if not api_key:
-            raise ValueError("GROK_API_KEY or XAI_API_KEY environment variable not set")
+            raise ValueError("GROK_API_KEY, XAI_API_KEY, or GROQ_API_KEY environment variable not set")
         
-        # Initialize OpenAI client with Grok's base URL
+        # Initialize OpenAI client with Groq's base URL
         self.client = OpenAI(
             api_key=api_key,
-            base_url="https://api.x.ai/v1"
+            base_url="https://api.groq.com/openai/v1"
         )
-        self.model = "grok-beta"  # or "grok-2-latest"
+        # Use Groq's fast models
+        self.model = "llama-3.3-70b-versatile"  # Fast and capable model
         
     async def generate_response_stream(
         self,
@@ -219,4 +220,4 @@ Answer:"""
             }
 
 # Global instance
-grok_client = GrokClient()
+groq_client = GroqClient()

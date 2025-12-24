@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from models import ChatRequest, ChatResponse
-from grok_client import grok_client
+from grok_client import groq_client
 from pdf_processor import pdf_processor
 from queue_manager import job_queue
 
@@ -87,8 +87,8 @@ async def stream_response(job_id: str):
                 }
                 return
             
-            # Stream response from Grok
-            async for event in grok_client.generate_response_stream(
+            # Stream response from Groq
+            async for event in groq_client.generate_response_stream(
                 job["query"],
                 available_docs
             ):
